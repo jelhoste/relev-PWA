@@ -89,7 +89,8 @@ function loadI(l){
   upd();
 }
 const fullH=()=>Math.max(156,$('#roll').clientHeight-RULER-2);
-const rhOf=l=>l.full?fullH()/(l.hi-l.lo+1):l.rh;
+const rhOf=l=>hOf(l)/(l.hi-l.lo+1);
+const ext=(l,n)=>{const lo=Math.min(l.lo,n.hauteur-2),hi=Math.max(l.hi,n.hauteur+2);if(lo!=l.lo||hi!=l.hi){l.lo=lo;l.hi=hi;fit(l)}};
 const hOf=l=>l.full?fullH():Math.max(156,Math.round((l.hi-l.lo+1)*l.rh));
 const fit=l=>{l.h=hOf(l);l.cv.height=l.h};
 const mk=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
@@ -226,7 +227,7 @@ addEventListener('keydown',e=>{
   if(e.code=='Space'){e.preventDefault();if(play)stop();else start();return}
   if(!sel)return;const l=L[sel.l],n=l.notes[sel.k],d=1/sub();let ch=1;
   if(e.key=='Delete'||e.key=='Backspace'){l.notes.splice(sel.k,1);sel=null}
-  else if(e.key=='ArrowUp'||e.key=='ArrowDown'){n.hauteur+=e.key=='ArrowUp'?1:-1;n.hauteur_originale=n.hauteur;n.statut='editee'}
+  else if(e.key=='ArrowUp'||e.key=='ArrowDown'){n.hauteur+=e.key=='ArrowUp'?1:-1;n.hauteur_originale=n.hauteur;n.statut='editee';ext(l,n)}
   else if(e.key=='ArrowLeft'||e.key=='ArrowRight'){const s=e.key=='ArrowRight'?d:-d;e.shiftKey?mv(n,n.pos_debut,Math.max(n.pos_debut+d,n.pos_fin+s)):mv(n,Math.max(0,n.pos_debut+s),n.pos_fin+s)}
   else ch=0;
   if(ch){e.preventDefault();draw();stat();re()}
